@@ -35,6 +35,11 @@ class SeleccionJuego(QWidget):
 		super().__init__(*args, **kwargs)
 		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego.ui'), self)
 
+class SudokuGame(QWidget):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego.ui'), self)
+
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

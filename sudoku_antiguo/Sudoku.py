@@ -6,10 +6,6 @@ import numpy as np
 import copy
 import tqdm
 
-
-
-
-
 class Sudoku():
 
 

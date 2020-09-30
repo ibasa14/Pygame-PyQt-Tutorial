@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import  QMainWindow
 from PyQt5 import uic
 import os
-from Sudoku import load_sudoku, select_sudoku
+from Sudoku import load_sudoku, select_sudoku, possible, auto_resolve
+import numpy as np
+import time
 
 UI_PATH = os.path.join(os.getcwd(), 'ui')
 
@@ -17,6 +19,27 @@ class SudokuGame(QMainWindow):
 		self.grid = self.original_grid.copy()
 		self.set_values(self.original_grid)
 		self.lock_values(self.original_grid)
+		self.resolver_button.clicked.connect(self.resolve_SudokuGame)
+
+
+	def resolve_SudokuGame(self):
+		print('estoy en la funcion resolve_sudokuGame')
+		solucion = auto_resolve(self.original_grid)
+
+		while True:
+			try:
+				aux = next(solucion)
+				if aux.sum() == 405:
+					break
+			except:
+				pass
+
+		print(aux)
+
+
+		print('esta es la solucion del problema')
+		print(solucion)
+		#self.set_values(solucion)
 
 
 	def set_values(self,grid):

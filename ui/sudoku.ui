@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>803</width>
-    <height>674</height>
+    <height>675</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,23 +17,32 @@
    <string notr="true">padding:0</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="reiniciar_button">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>120</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>Reiniciar</string>
     </property>
+    <property name="autoDefault">
+     <bool>true</bool>
+    </property>
+    <property name="default">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="comprobar_button">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>260</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -43,10 +52,10 @@
      <string>Comprobar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="nuevo_button">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>410</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -2324,6 +2333,121 @@
      <number>10</number>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: '#0B8CF4'</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="resolver_button">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>540</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Resolver</string>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>reiniciar_button</zorder>
+   <zorder>comprobar_button</zorder>
+   <zorder>nuevo_button</zorder>
+   <zorder>cell00</zorder>
+   <zorder>cell10</zorder>
+   <zorder>cell20</zorder>
+   <zorder>cell30</zorder>
+   <zorder>cell40</zorder>
+   <zorder>cell50</zorder>
+   <zorder>cell60</zorder>
+   <zorder>cell70</zorder>
+   <zorder>cell80</zorder>
+   <zorder>cell31</zorder>
+   <zorder>cell01</zorder>
+   <zorder>cell71</zorder>
+   <zorder>cell11</zorder>
+   <zorder>cell41</zorder>
+   <zorder>cell51</zorder>
+   <zorder>cell61</zorder>
+   <zorder>cell81</zorder>
+   <zorder>cell21</zorder>
+   <zorder>cell72</zorder>
+   <zorder>cell73</zorder>
+   <zorder>cell02</zorder>
+   <zorder>cell63</zorder>
+   <zorder>cell43</zorder>
+   <zorder>cell13</zorder>
+   <zorder>cell22</zorder>
+   <zorder>cell32</zorder>
+   <zorder>cell62</zorder>
+   <zorder>cell83</zorder>
+   <zorder>cell33</zorder>
+   <zorder>cell12</zorder>
+   <zorder>cell03</zorder>
+   <zorder>cell42</zorder>
+   <zorder>cell23</zorder>
+   <zorder>cell53</zorder>
+   <zorder>cell82</zorder>
+   <zorder>cell52</zorder>
+   <zorder>cell66</zorder>
+   <zorder>cell47</zorder>
+   <zorder>cell74</zorder>
+   <zorder>cell46</zorder>
+   <zorder>cell87</zorder>
+   <zorder>cell75</zorder>
+   <zorder>cell04</zorder>
+   <zorder>cell26</zorder>
+   <zorder>cell07</zorder>
+   <zorder>cell65</zorder>
+   <zorder>cell77</zorder>
+   <zorder>cell27</zorder>
+   <zorder>cell76</zorder>
+   <zorder>cell17</zorder>
+   <zorder>cell45</zorder>
+   <zorder>cell67</zorder>
+   <zorder>cell16</zorder>
+   <zorder>cell15</zorder>
+   <zorder>cell24</zorder>
+   <zorder>cell34</zorder>
+   <zorder>cell64</zorder>
+   <zorder>cell85</zorder>
+   <zorder>cell06</zorder>
+   <zorder>cell35</zorder>
+   <zorder>cell36</zorder>
+   <zorder>cell14</zorder>
+   <zorder>cell05</zorder>
+   <zorder>cell44</zorder>
+   <zorder>cell25</zorder>
+   <zorder>cell55</zorder>
+   <zorder>cell86</zorder>
+   <zorder>cell84</zorder>
+   <zorder>cell37</zorder>
+   <zorder>cell57</zorder>
+   <zorder>cell54</zorder>
+   <zorder>cell56</zorder>
+   <zorder>cell18</zorder>
+   <zorder>cell88</zorder>
+   <zorder>cell08</zorder>
+   <zorder>cell58</zorder>
+   <zorder>cell68</zorder>
+   <zorder>cell38</zorder>
+   <zorder>cell28</zorder>
+   <zorder>cell78</zorder>
+   <zorder>cell48</zorder>
+   <zorder>resolver_button</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -2331,7 +2455,7 @@
      <x>0</x>
      <y>0</y>
      <width>803</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

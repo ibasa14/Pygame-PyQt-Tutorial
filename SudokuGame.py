@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import  QMainWindow
-from PyQt5 import uic
+from PyQt5.QtWidgets import  QMainWindow, QDialog
+from PyQt5 import uic, QtTest
 import os
 from Sudoku import load_sudoku, select_sudoku, possible, auto_resolve
 import numpy as np
@@ -13,15 +13,107 @@ class SudokuGame(QMainWindow):
 		super(SudokuGame, self).__init__(parent)
 		uic.loadUi(os.path.join(UI_PATH, 'sudoku.ui'), self)
 
+		self.diccionario_celdas = {
+			'cell00': self.cell00,
+			'cell01': self.cell01,
+			'cell02': self.cell02,
+			'cell03': self.cell03,
+			'cell04': self.cell04,
+			'cell05': self.cell05,
+			'cell06': self.cell06,
+			'cell07': self.cell07,
+			'cell08': self.cell08,
+			'cell10': self.cell10,
+			'cell11': self.cell11,
+			'cell12': self.cell12,
+			'cell13': self.cell13,
+			'cell14': self.cell14,
+			'cell15': self.cell15,
+			'cell16': self.cell16,
+			'cell17': self.cell17,
+			'cell18': self.cell18,
+			'cell20': self.cell20,
+			'cell21': self.cell21,
+			'cell22': self.cell22,
+			'cell23': self.cell23,
+			'cell24': self.cell24,
+			'cell25': self.cell25,
+			'cell26': self.cell26,
+			'cell27': self.cell27,
+			'cell28': self.cell28,
+			'cell30': self.cell30,
+			'cell31': self.cell31,
+			'cell32': self.cell32,
+			'cell33': self.cell33,
+			'cell34': self.cell34,
+			'cell35': self.cell35,
+			'cell36': self.cell36,
+			'cell37': self.cell37,
+			'cell38': self.cell38,
+			'cell40': self.cell40,
+			'cell41': self.cell41,
+			'cell42': self.cell42,
+			'cell43': self.cell43,
+			'cell44': self.cell44,
+			'cell45': self.cell45,
+			'cell46': self.cell46,
+			'cell47': self.cell47,
+			'cell48': self.cell48,
+			'cell50': self.cell50,
+			'cell51': self.cell51,
+			'cell52': self.cell52,
+			'cell53': self.cell53,
+			'cell54': self.cell54,
+			'cell55': self.cell55,
+			'cell56': self.cell56,
+			'cell57': self.cell57,
+			'cell58': self.cell58,
+			'cell60': self.cell60,
+			'cell61': self.cell61,
+			'cell62': self.cell62,
+			'cell63': self.cell63,
+			'cell64': self.cell64,
+			'cell65': self.cell65,
+			'cell66': self.cell66,
+			'cell67': self.cell67,
+			'cell68': self.cell68,
+			'cell70': self.cell70,
+			'cell71': self.cell71,
+			'cell72': self.cell72,
+			'cell73': self.cell73,
+			'cell74': self.cell74,
+			'cell75': self.cell75,
+			'cell76': self.cell76,
+			'cell77': self.cell77,
+			'cell78': self.cell78,
+			'cell80': self.cell80,
+			'cell81': self.cell81,
+			'cell82': self.cell82,
+			'cell83': self.cell83,
+			'cell84': self.cell84,
+			'cell85': self.cell85,
+			'cell86': self.cell86,
+			'cell87': self.cell87,
+			'cell88': self.cell88,
+		}
+
 		# al construir el objeto le damos valor a sus celdas cargando uno
 		# de los sudokus de forma aleatoria
 		self.original_grid, self.solution = load_sudoku(select_sudoku())
 		self.grid = self.original_grid.copy()
 		self.set_values(self.original_grid)
 		self.lock_values(self.original_grid)
+
+		# eventos de botones
 		self.resolver_button.clicked.connect(self.resolve_SudokuGame)
 		self.reiniciar_button.clicked.connect(self.reset_SudokuGame)
 		self.nuevo_button.clicked.connect(self.new_SudokuGame)
+		self.comprobar_button.clicked.connect(self.check_SudokuGame)
+
+		# evento al cambiar el valor de una celda
+		for key, value in self.diccionario_celdas.items():
+			self.diccionario_celdas[key].valueChanged.connect(self.actualize_SudokuGame)
+
 
 
 
@@ -36,7 +128,34 @@ class SudokuGame(QMainWindow):
 		self.set_values(self.original_grid)
 		self.lock_values(self.original_grid)
 
+	def check_SudokuGame(self):
 
+		self.actualize_SudokuGame()
+		for row in range(0,9):
+			for col in range(0,9):
+				if (possible(row, col, self.grid[row][col], self.grid)) or (self.diccionario_celdas[f"cell{row}{col}"].isReadOnly()):
+					pass
+				else:
+					self.warning_cell(row, col)
+					return 
+		
+		self.show_dialog_success()
+		return
+		
+
+	def actualize_SudokuGame(self):
+		grid_actual = self.get_values()
+		self.grid = grid_actual
+
+
+	def get_values(self):
+		grid_auxiliar = np.zeros((9,9))
+		for key, values in self.diccionario_celdas.items():
+			row = int(key[-2])
+			col = int(key[-1])
+			grid_auxiliar[row][col] = self.diccionario_celdas[key].value()
+
+		return grid_auxiliar
 
 
 	def set_values(self,grid):
@@ -699,3 +818,21 @@ class SudokuGame(QMainWindow):
 			self.cell88.setProperty('readOnly', False)
 			self.cell88.setStyleSheet('QSpinBox {background-color: white; font-size: 20px}')
 
+	def warning_cell(self, row, col):
+		for _ in range(0,2):
+			self.diccionario_celdas[f"cell{row}{col}"].setStyleSheet('QSpinBox {background-color: rgba(250, 10, 10, 0.8); font-size: 20px}')
+			QtTest.QTest.qWait(100)
+			self.diccionario_celdas[f"cell{row}{col}"].setStyleSheet('QSpinBox {background-color: white; font-size: 20px}')
+			QtTest.QTest.qWait(100)
+
+	def show_dialog_success(self):
+		dialog = CustomDialog()
+		dialog.exec_()
+
+class CustomDialog(QDialog):
+
+	def __init__(self, *args, **kwargs):
+		super(CustomDialog, self).__init__(*args, **kwargs)
+		uic.loadUi(os.path.join(UI_PATH, 'dialog_success.ui'), self)
+
+		self.pushButton.clicked.connect(self.accept)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>803</width>
-    <height>675</height>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <widget class="QPushButton" name="reiniciar_button">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>110</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -42,7 +42,7 @@
    <widget class="QPushButton" name="comprobar_button">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>560</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -55,7 +55,7 @@
    <widget class="QPushButton" name="nuevo_button">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>260</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -2339,20 +2339,20 @@
       <x>0</x>
       <y>0</y>
       <width>801</width>
-      <height>651</height>
+      <height>791</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: '#0B8CF4'</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="resolver_button">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>410</x>
       <y>540</y>
       <width>131</width>
       <height>51</height>
@@ -2455,7 +2455,7 @@
      <x>0</x>
      <y>0</y>
      <width>803</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

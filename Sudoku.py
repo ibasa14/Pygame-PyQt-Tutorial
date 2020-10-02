@@ -31,21 +31,22 @@ def load_sudoku(filename):
     numero_sudoku = os.path.splitext(filename)[0].split('_')[1]
     problema = joblib.load(os.path.join(SUDOKU_FOLDER, filename))
     solucion = joblib.load(os.path.join(SOLUTION_FOLDER, f'solucion_{numero_sudoku}.pkl'))
-    print(problema, solucion)
     return (problema, solucion)
     
 def possible(y,x,n, grid):
+    #compruebo toda la fila
     for i in range(0,9):
-        if grid[y][i] == n:
+        if grid[y][i] == n and i != x:
             return False
     for i in range(0,9):
-        if grid[i][x] == n:
+        if grid[i][x] == n and i != y:
             return False
+
     x0 = (x // 3) * 3
     y0 = (y // 3) * 3
     for i in range(0,3):
         for j in range(0,3):
-            if grid[y0+i][x0+j] == n:
+            if grid[y0+i][x0+j] == n and y0+i != y and x0+j != x:
                 return False
     return True
 

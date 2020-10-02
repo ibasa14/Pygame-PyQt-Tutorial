@@ -7,7 +7,9 @@ import copy
 import tqdm
 import joblib
 
-SUDOKU_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sudokusdb')
+SUDOKU_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sudokusdb', 'problemas')
+SOLUTION_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sudokusdb', 'soluciones')
+
 
 def select_sudoku():
     '''
@@ -24,10 +26,13 @@ def load_sudoku(filename):
     '''
     Carga un sudoku y lo devuelve en formato Numpy 2D
     @param: nombre del archivo
-    @return: numpy array sudoku
+    @return: tuple (numpy array sudoku problema, numpy array sudoku solucion)
     '''
-    grid = joblib.load(os.path.join(SUDOKU_FOLDER, filename))
-    return grid
+    numero_sudoku = os.path.splitext(filename)[0].split('_')[1]
+    problema = joblib.load(os.path.join(SUDOKU_FOLDER, filename))
+    solucion = joblib.load(os.path.join(SOLUTION_FOLDER, f'solucion_{numero_sudoku}.pkl'))
+    print(problema, solucion)
+    return (problema, solucion)
     
 def possible(y,x,n, grid):
     for i in range(0,9):
@@ -60,9 +65,10 @@ def auto_resolve(grid):
                         auto_resolve(grid)
                         grid[y][x] = 0
                 #print('justo antes del primer return')
-                yield grid
+                return
     print('justo antes del segundo return')
-    yield grid
+    print(grid)
+    return grid
     
 
 

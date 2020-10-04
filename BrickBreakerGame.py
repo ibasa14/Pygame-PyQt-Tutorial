@@ -136,6 +136,13 @@ class BrickBreakerGame():
             if self.ball.x_position == self.objects_dict[key].x_position and \
                 self.ball.x_position == self.objects_dict[key].x_position:
                 print(f'hubo una colision en {key}')
+                angulo_objeto = self.objects_dict[key].angle
+                if angulo_objeto == 90:
+                    self.angle = self.angle + 90
+                if angulo_objeto == 180:
+                    self.angle = self.angle + 270
+                if angulo_objeto == 270:
+                    self.angle = self.angle + 180
 
     def play(self):
         while self.playing:

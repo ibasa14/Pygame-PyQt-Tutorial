@@ -1,127 +1,177 @@
 import pygame
+import os
 import time
+import numpy as np 	
 import random
- 
-pygame.init()
- 
-white = (255, 255, 255)
-yellow = (255, 255, 102)
-black = (0, 0, 0)
-red = (213, 50, 80)
-green = (0, 255, 0)
-blue = (50, 153, 213)
- 
-dis_width = 600
-dis_height = 400
- 
-dis = pygame.display.set_mode((dis_width, dis_height))
-pygame.display.set_caption('Snake del Basilio')
- 
-clock = pygame.time.Clock()
- 
-snake_block = 5
-snake_speed = 20
- 
-font_style = pygame.font.SysFont("bahnschrift", 25)
-score_font = pygame.font.SysFont("comicsansms", 35)
- 
- 
-def Your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, yellow)
-    dis.blit(value, [0, 0])
- 
- 
- 
-def our_snake(snake_block, snake_list):
-    for x in snake_list:
-        pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
- 
- 
-def message(msg, color):
-    mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [dis_width / 6, dis_height / 3])
- 
- 
-def gameLoop():
-    game_over = False
-    game_close = False
- 
-    x1 = dis_width / 2
-    y1 = dis_height / 2
- 
-    x1_change = 0
-    y1_change = 0
- 
-    snake_List = []
-    Length_of_snake = 1
- 
-    foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-    foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
- 
-    while not game_over:
- 
-        while game_close == True:
-            dis.fill(black)
-            message("You Lost! Press C-Play Again or Q-Quit", red)
-            #Your_score(Length_of_snake - 1)
-            pygame.display.update()
- 
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
-                    if event.key == pygame.K_c:
-                        gameLoop()
- 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    x1_change = -snake_block
-                    y1_change = 0
-                elif event.key == pygame.K_RIGHT:
-                    x1_change = snake_block
-                    y1_change = 0
-                elif event.key == pygame.K_UP:
-                    y1_change = -snake_block
-                    x1_change = 0
-                elif event.key == pygame.K_DOWN:
-                    y1_change = snake_block
-                    x1_change = 0
- 
-        if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
-            game_close = True
-        x1 += x1_change
-        y1 += y1_change
-        dis.fill(blue)
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
-        snake_Head = []
-        snake_Head.append(x1)
-        snake_Head.append(y1)
-        snake_List.append(snake_Head)
-        if len(snake_List) > Length_of_snake:
-            del snake_List[0]
- 
-        for x in snake_List[:-1]:
-            if x == snake_Head:
-                game_close = True
- 
-        our_snake(snake_block, snake_List)
-        #Your_score(Length_of_snake - 1)
- 
-        pygame.display.update()
- 
-        if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
-            Length_of_snake += 1
- 
-        clock.tick(snake_speed)
- 
-    pygame.quit()
-    quit()
- 
- 
-gameLoop()
+
+
+# COLORES
+SNAKE_COLOR = (5, 250, 10) 
+BACKGROUND_COLOR = (0, 0, 0) 
+FOOD_COLOR = (250, 10, 10) 
+
+
+class Food():
+	def __init__(self, coor, color = FOOD_COLOR, size = 10):
+		self.food_x = coor[0]
+		self.food_y = coor[1]
+		self.color = color
+		self.size = size
+
+	def __repr__(self):
+		return "Food: \n"+\
+				f"\tfood_x: {self.food_x}\n" + \
+				f"\tfood_y: {self.food_y}\n"
+
+
+
+class Snake():
+	def __init__(self, color = SNAKE_COLOR, speed = 10,  size = 10, **kwargs):
+		self.color = color
+		self.length = 1
+		self.body = []
+		self.x_position = kwargs.get('initial_x')
+		self.y_position = kwargs.get('initial_y')
+		self.x_distance = 0
+		self.y_distance = 0
+		self.speed = speed
+		self.size = size
+
+	def __repr__(self):
+		return "Snake: \n"+\
+				f"\tlength: {self.length}, type: {type(self.length)}\n" + \
+				f"\tx_position: {self.x_position}, type: {type(self.x_position)}\n" + \
+				f"\ty_position: {self.y_position}, type: {type(self.y_position)}\n" + \
+				f"\tsize: {self.size}, type: {type(self.size)}\n"
+
+
+	def feed(self):
+		self.length += 1
+
+	def has_collide(self, x_boundary, y_boundary):
+
+		collide_itself = False
+		for i in self.body[:-1]:
+			if i ==  (self.x_position, self.y_position):
+				collide_itself = True
+				break
+
+		return self.x_position <= 0 or self.x_position >= x_boundary or \
+				self.y_position <= 0 or self.y_position >= y_boundary or \
+				collide_itself
+
+	def change_position(self):
+		self.x_position = self.x_position + self.x_distance
+		self.y_position = self.y_position + self.y_distance
+
+
+class SnakeGame():
+	def __init__(self):
+		self.game = pygame.init()
+		self.font_style = pygame.font.SysFont(None, 30)
+		self.display = pygame.display.set_mode((500, 500))
+		self.name = pygame.display.set_caption("Basa's Snake")
+		self.clock = pygame.time.Clock()
+		self.playing = True
+		self.game_over = False
+		self.possible_x_values = np.arange(0, self.display.get_width(), 10).tolist()
+		self.possible_y_values = np.arange(0, self.display.get_height(), 10).tolist()
+		self.color = BACKGROUND_COLOR
+		self.food = Food(coor = self.set_random_coords())
+		self.snake = Snake(initial_x = int(self.display.get_width()/2),\
+							initial_y = int(self.display.get_height()/2))
+
+		self.jugar()
+
+
+	def lost_message(self):
+		message = pygame.font.SysFont(None, 30).render('Has perdido. Pulsa ESPACIO para continuar.',\
+														True, (250, 10, 10))
+		self.display.blit(message, [int(self.display.get_width()/10), int(self.display.get_height()/3)])
+		pygame.display.update()
+
+		while True:
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_SPACE:
+						SnakeGame()
+				if event.type == pygame.QUIT:
+					quit()		
+
+	def snake_desc(self):
+		print(self.snake)
+
+	def food_desc(self):
+		print(self.food)
+
+	def create_snake(self):
+		for x in self.snake.body:
+			pygame.draw.rect(self.display, self.snake.color, [x[0], x[1], self.snake.size, self.snake.size])
+
+
+
+	def jugar(self):
+
+		while(self.playing):
+
+			if self.game_over == True:
+				self.lost_message()
+
+			self.display.fill(self.color)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					quit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_RIGHT and self.snake.x_distance != - self.snake.speed:
+						self.snake.x_distance = self.snake.speed
+						self.snake.y_distance = 0
+					elif event.key == pygame.K_LEFT and self.snake.x_distance != self.snake.speed:
+						self.snake.x_distance = - self.snake.speed
+						self.snake.y_distance = 0
+					elif event.key == pygame.K_DOWN and self.snake.y_distance != - self.snake.speed:
+						self.snake.x_distance = 0
+						self.snake.y_distance = self.snake.speed
+					elif event.key == pygame.K_UP and self.snake.y_distance != self.snake.speed:
+						self.snake.x_distance = 0
+						self.snake.y_distance = - self.snake.speed	
+
+			# Dibujo comida
+			pygame.draw.rect(self.display, self.food.color, [self.food.food_x, self.food.food_y,\
+															 self.food.size, self.food.size])	
+
+			self.snake.change_position()
+
+			# Compruebo si la serpiente pasa por encima de la comida
+			if self.snake.x_position == self.food.food_x and \
+				self.snake.y_position == self.food.food_y:
+					print('te has alimentado')
+					self.snake.feed()
+					self.food = Food(self.set_random_coords())
+									
+									
+			snake_Head = (self.snake.x_position, self.snake.y_position)
+
+			self.snake.body.append(snake_Head)
+
+			if len(self.snake.body) > self.snake.length:
+				del self.snake.body[0]
+
+			# Dibujo snake
+			self.create_snake()
+
+			if self.snake.has_collide(self.display.get_width(), self.display.get_height()):
+				self.game_over = True
+
+			pygame.display.update()
+			self.clock.tick(30)
+
+
+	def set_random_coords(self):
+		return (np.random.choice(self.possible_x_values), np.random.choice(self.possible_y_values))
+
+
+
+
+
+if __name__ == '__main__':
+	snake_game = SnakeGame()

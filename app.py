@@ -24,6 +24,8 @@ class MainWindow(QMainWindow):
 		self.seleccion_juego = SeleccionJuego()
 		#aqui al no se run boton el evento se recoge de manera diferente
 		self.seleccion_juego.sudoku_label.mousePressEvent = self.open_sudoku
+		self.seleccion_juego.snake_label.mousePressEvent = self.open_snake
+
 		self.stackedWidget.addWidget(self.seleccion_juego)
 
 		### Sudoku game
@@ -36,6 +38,8 @@ class MainWindow(QMainWindow):
 	def open_sudoku(self, event):
 		self.sudoku_game.show()
 
+	def open_snake(self, event):
+		os.system('python SnakeGame.py')
 
 class Intro(QWidget):
 	def __init__(self, *args, **kwargs):

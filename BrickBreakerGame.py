@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 PANEL_SPEED = 20
-BALL_SPEED = 1
+BALL_SPEED = 5
 PANEL_COLOR = (230, 15, 20)
 BALL_COLOR = (255, 255, 255)
 BACKGROUND_COLOR = (0,0,0)
@@ -21,8 +21,8 @@ class Ball():
         self.static = True
 
     def move(self, angle):
-        self.x_position = self.x_position + round(math.cos(math.radians(angle) * self.speed))
-        self.y_position = self.y_position + round(math.sin(math.radians(angle) * -(self.speed)))
+        self.x_position = self.x_position + round(math.cos(math.radians(angle)) * self.speed)
+        self.y_position = self.y_position + round(math.sin(math.radians(angle)) * -(self.speed))
 
 
 class Wall():
@@ -87,6 +87,7 @@ class BrickBreakerGame():
         self.show_walls_info()
         self.clock = pygame.time.Clock()
         self.started = False
+        self.collide_counter = 0
         self.angle = None
         self.play()
 
@@ -104,7 +105,7 @@ class BrickBreakerGame():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.ball.static = False
-                        self.angle = 60 #np.random.randint(35, 145)
+                        self.angle =  np.random.randint(35, 145)
                         print(f"este es el valor de angle: {self.angle}")
                         self.started = True
                         return
@@ -132,17 +133,70 @@ class BrickBreakerGame():
         pygame.draw.circle(self.display, self.ball.color, (int(self.ball.x_position), int(self.ball.y_position)), self.ball.radius)
 
     def check_collide(self):
-        for key in self.objects_dict.keys():
-            if self.ball.x_position == self.objects_dict[key].x_position and \
-                self.ball.x_position == self.objects_dict[key].x_position:
-                print(f'hubo una colision en {key}')
-                angulo_objeto = self.objects_dict[key].angle
-                if angulo_objeto == 90:
-                    self.angle = self.angle + 90
-                if angulo_objeto == 180:
+        if self.collide_counter > 0:
+            self.collide_counter -= 1
+        else:
+            """for key in self.objects_dict.keys():
+                if self.ball.x_position == self.objects_dict[key].x_position or \
+                    self.ball.y_position == self.objects_dict[key].y_position:
+                    print(f'hubo una colision en {key}')
+                    angulo_objeto = self.objects_dict[key].angle
+                    if angulo_objeto == 90:
+                        if self.angle > 180:
+                            self.angle = self.angle - 270
+                        else:
+                            self.angle =  180 - self.angle
+                    if angulo_objeto == 180:
+                        if self.angle > 90:
+                            self.angle = 360 - self.angle
+                        else:
+                            self.angle = self.angle + 270 
+                    if angulo_objeto == 270:
+                        self.angle = 180 - self.angle
+                        self.has_collide = True
+                        print(f"El angulo nuevo es angle: {self.angle}")
+                        self.collide_counter = 3"""
+            if self.ball.x_position <= 0:
+                if self.angle >= 180:
+                    self.angle = self.angle - 270
+                else:
+                    self.angle =  180 - self.angle
+                self.collide_counter = 3
+                print(f"El angulo nuevo es angle: {self.angle}")
+                self.collide = 3
+
+                return
+            if self.ball.y_position <= 0:
+                if self.angle >= 90:
+                    self.angle = 360 - self.angle
+                else:
                     self.angle = self.angle + 270
-                if angulo_objeto == 270:
-                    self.angle = self.angle + 180
+                self.collide_counter = 3
+                print(f"El angulo nuevo es angle: {self.angle}")
+                self.collide = 3
+
+                return
+            if self.ball.x_position >= self.display.get_width():
+                if self.angle >= 0:
+                    self.angle = 180 - self.angle
+                else:
+                    self.angle = 360 - self.angle + 180
+                print(f"El angulo nuevo es angle: {self.angle}")
+                self.collide = 3
+
+                return
+            if self.ball.y_position >= self.display.get_height():
+                if self.angle >= 270:
+                    self.angle = 360 - self.angle
+                else:
+                    self.angle = 360 + self.angle
+                print(f"El angulo nuevo es angle: {self.angle}")
+                self.collide = 3
+
+                return
+
+
+
 
     def play(self):
         while self.playing:

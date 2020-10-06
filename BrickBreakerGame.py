@@ -3,8 +3,8 @@ import os
 import math
 import numpy as np
 
-PANEL_SPEED = 20
-BALL_SPEED = 5
+PANEL_SPEED = 2
+BALL_SPEED = 2
 PANEL_COLOR = (230, 15, 20)
 BALL_COLOR = (255, 255, 255)
 BACKGROUND_COLOR = (0,0,0)
@@ -43,11 +43,10 @@ class Wall():
                 f"\tangle: {self.angle}\n" + \
                 f"\tcolor: {self.color}\n"
 
-
     
 
 class Panel():
-    def __init__(self, width = 30, height = 6, color = PANEL_COLOR,speed = PANEL_SPEED, **kwargs):
+    def __init__(self, width = 50, height = 5, color = PANEL_COLOR,speed = PANEL_SPEED, **kwargs):
         self.x_position = kwargs.get('initial_x')
         self.y_position = kwargs.get('initial_y')
         self.width = width
@@ -55,20 +54,24 @@ class Panel():
         self.speed = speed
         self.color = color
 
-    def move(self, direction):
+    def move(self, direction, display_width, wall_width):
         if direction == 'right':
-            self.x_position += self.speed
-            self.y_position = self.y_position
+            if display_width -  (self.x_position + self.width) >= self.speed:
+                self.x_position += self.speed
+            else:
+                pass
         else:
-            self.x_position -= self.speed
-            self.y_position = self.y_position            
+            if self.x_position - self.speed >= 0:
+                self.x_position -= self.speed
+            else:
+                pass            
     
 
 class BrickBreakerGame():
     def __init__(self):
         self.game = pygame.init()
-        self.display = pygame.display.set_mode((500, 500))
-        #self.panel = Panel(initial_x = int(self.display.get_width()/2), initial_y = self.display.get_height())
+        self.display = pygame.display.set_mode((300, 300))
+        self.panel = Panel(initial_x = int(self.display.get_width()/2), initial_y = self.display.get_height())
         self.playing = True
         self.game_over = False
         self.background = BACKGROUND_COLOR
@@ -93,9 +96,9 @@ class BrickBreakerGame():
 
     def start_message(self):
         
-        message = pygame.font.SysFont(None, 30).render('Pulsa ESPACIO para empezar.',\
+        message = pygame.font.SysFont(None, 25).render('Pulsa ESPACIO para empezar.',\
 														True, (250, 10, 10))
-        self.display.blit(message, [int(self.display.get_width()/5), int(self.display.get_height()/3)])
+        self.display.blit(message, [int(self.display.get_width()/8), int(self.display.get_height()/3)])
         pygame.display.update()
 
         while True:
@@ -106,9 +109,24 @@ class BrickBreakerGame():
                     if event.key == pygame.K_SPACE:
                         self.ball.static = False
                         self.angle =  np.random.randint(35, 145)
-                        print(f"este es el valor de angle: {self.angle}")
                         self.started = True
                         return
+
+    def game_over_message(self):
+        
+        message = pygame.font.SysFont(None, 25).render('¡Has perdido! Pulsa ESPACIO.',\
+														True, (250, 10, 10))
+        self.display.blit(message, [int(self.display.get_width()/8), int(self.display.get_height()/3)])
+        pygame.display.update()
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        BrickBreakerGame()
+
 
 
     def show_walls_info(self):
@@ -123,8 +141,8 @@ class BrickBreakerGame():
                                                                 self.left_wall.width, self.left_wall.height])
         pygame.draw.rect(self.display, self.top_wall.color, [self.top_wall.x_position, self.top_wall.y_position ,\
                                                                 self.top_wall.width, self.top_wall.height])
-        pygame.draw.rect(self.display, self.bottom_wall.color, [self.bottom_wall.x_position, self.bottom_wall.y_position - self.bottom_wall.height ,\
-                                                                self.bottom_wall.width, self.bottom_wall.height])                                                                  
+        #pygame.draw.rect(self.display, self.bottom_wall.color, [self.bottom_wall.x_position, self.bottom_wall.y_position - self.bottom_wall.height ,\
+        #                                                       self.bottom_wall.width, self.bottom_wall.height])                                                                  
     def draw_panel(self):
         pygame.draw.rect(self.display, self.panel.color, [self.panel.x_position, self.panel.y_position - self.panel.height,\
                                                           self.panel.width, self.panel.height])
@@ -132,67 +150,87 @@ class BrickBreakerGame():
     def draw_ball(self):
         pygame.draw.circle(self.display, self.ball.color, (int(self.ball.x_position), int(self.ball.y_position)), self.ball.radius)
 
+    def normalize_angle(self):
+        # primero normalizamos : 0 < angle < 360
+        angle_normalized =  self.angle % 360
+
+        # pasamos a positivo en caso de que sea necesario
+        if angle_normalized < 0:
+            angle_normalized += 360
+        
+        self.angle = angle_normalized
+
+
+
     def check_collide(self):
         if self.collide_counter > 0:
             self.collide_counter -= 1
         else:
-            """for key in self.objects_dict.keys():
-                if self.ball.x_position == self.objects_dict[key].x_position or \
-                    self.ball.y_position == self.objects_dict[key].y_position:
-                    print(f'hubo una colision en {key}')
-                    angulo_objeto = self.objects_dict[key].angle
-                    if angulo_objeto == 90:
-                        if self.angle > 180:
-                            self.angle = self.angle - 270
-                        else:
-                            self.angle =  180 - self.angle
-                    if angulo_objeto == 180:
-                        if self.angle > 90:
-                            self.angle = 360 - self.angle
-                        else:
-                            self.angle = self.angle + 270 
-                    if angulo_objeto == 270:
-                        self.angle = 180 - self.angle
-                        self.has_collide = True
-                        print(f"El angulo nuevo es angle: {self.angle}")
-                        self.collide_counter = 3"""
-            if self.ball.x_position <= 0:
+            # pared izquierda
+            if self.ball.x_position <= 0 and self.ball.y_position != 0:
                 if self.angle >= 180:
                     self.angle = self.angle - 270
                 else:
                     self.angle =  180 - self.angle
-                self.collide_counter = 3
+                self.collide_counter = 15
+                self.normalize_angle()
                 print(f"El angulo nuevo es angle: {self.angle}")
-                self.collide = 3
-
                 return
+
+            #pared de arriba
             if self.ball.y_position <= 0:
                 if self.angle >= 90:
                     self.angle = 360 - self.angle
                 else:
                     self.angle = self.angle + 270
-                self.collide_counter = 3
+                self.collide_counter = 15
+                self.normalize_angle()
                 print(f"El angulo nuevo es angle: {self.angle}")
-                self.collide = 3
-
                 return
+
+            #pared izquierda
             if self.ball.x_position >= self.display.get_width():
                 if self.angle >= 0:
                     self.angle = 180 - self.angle
                 else:
                     self.angle = 360 - self.angle + 180
+                self.collide_counter = 15
+                self.normalize_angle()
                 print(f"El angulo nuevo es angle: {self.angle}")
-                self.collide = 3
-
                 return
+
+            if self.ball.y_position >= self.display.get_height() - self.panel.height and \
+                self.ball.x_position >= self.panel.x_position and \
+                self.ball.x_position <= self.panel.x_position + self.panel.width:
+                # si toca el panel le damos un valor aleatorio pero en funcion de donde sea el contacto
+                # parte izquierda
+                if self.ball.x_position <= self.panel.x_position + int(self.panel.width / 4):
+                    self.angle = np.random.randint(150, 165)
+                # parte central izquierda    
+                elif self.ball.x_position <= self.panel.x_position +  int(self.panel.width / 2):
+                    self.angle = np.random.randint(110, 150)
+
+                # parte central derecha
+                elif self.ball.x_position <= self.panel.x_position +  int(self.panel.width * 0.75):
+                    self.angle = np.random.randint(30, 70)
+
+                # parte derecha
+                else:
+                    self.angle = np.random.randint(30, 50)   
+                                                             
+                self.collide_counter = 3
+                print(f"El angulo nuevo es angle: {self.angle}")
+                return
+
             if self.ball.y_position >= self.display.get_height():
-                if self.angle >= 270:
+                """if self.angle >= 270:
                     self.angle = 360 - self.angle
                 else:
                     self.angle = 360 + self.angle
-                print(f"El angulo nuevo es angle: {self.angle}")
-                self.collide = 3
-
+                self.collide_counter = 3
+                self.normalize_angle()"""
+                self.game_over = True
+                print(f"Has perdido")
                 return
 
 
@@ -205,43 +243,26 @@ class BrickBreakerGame():
             if not self.started:
                 self.start_message()
             if self.game_over:
-                pass
+                self.game_over_message()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit()
                     
+            keys=pygame.key.get_pressed()
+
+            if keys[pygame.K_RIGHT]:
+                self.panel.move('right', self.display.get_width(), self.right_wall.width)
+            if keys[pygame.K_LEFT]:
+                self.panel.move('left', self.display.get_width(), self.right_wall.width)                    
+
             if self.ball.static == False:
                 self.ball.move(self.angle)
 
-
-            """if event.key == pygame.K_RIGHT:
-                        self.panel.move('right')
-                        pygame.key.set_repeat(1, 10)
-                    if event.key == pygame.K_LEFT:
-                        self.panel.move('left')
-                        pygame.key.set_repeat(1, 10)
-                """
-            """keys = pygame.key.get_pressed()
-
-            if keys[pygame.K_LEFT]:
-                if self.move_ticker == 0:
-                    self.move_ticker = 10
-                    self.panel.move('left')
-
-            if keys[pygame.K_RIGHT]:
-                if self.move_ticker == 0: 
-                    self.move_ticker = 10  
-                    self.panel.move('right')"""
-
-            """if self.move_ticker > 0:
-                self.move_ticker -= 1"""
-            """if not self.ball.static:
-                self.ball.move(self.angle)"""
+            self.draw_panel()
             self.check_collide()
             self.draw_ball()
-            #self.draw_panel()
             pygame.display.update()
-            self.clock.tick(30)
+            self.clock.tick(120)
 
 if __name__ == '__main__':
     brick_breaker_game = BrickBreakerGame()

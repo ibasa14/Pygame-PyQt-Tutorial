@@ -22,15 +22,15 @@ class MainWindow(QMainWindow):
 
 		### Seleccion juego
 		self.seleccion_juego = SeleccionJuego()
-		#aqui al no se run boton el evento se recoge de manera diferente
 		self.seleccion_juego.sudoku_label.mousePressEvent = self.open_sudoku
 		self.seleccion_juego.snake_label.mousePressEvent = self.open_snake
+		self.seleccion_juego.brick_label.mousePressEvent = self.open_pong
+
 
 		self.stackedWidget.addWidget(self.seleccion_juego)
 
 		### Sudoku game
 		self.sudoku_game = SudokuGame()
-		#self.stackedWidget.addWidget(self.sudoku_game)
 
 	def go_to_seleccion_juego(self):
 		self.stackedWidget.setCurrentIndex(1)
@@ -41,6 +41,9 @@ class MainWindow(QMainWindow):
 	def open_snake(self, event):
 		os.system('python SnakeGame.py')
 
+	def open_pong(self, event):
+		os.system('python SelfPongGame.py')
+
 class Intro(QWidget):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -49,7 +52,7 @@ class Intro(QWidget):
 class SeleccionJuego(QWidget):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego.ui'), self)
+		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego_v2.ui'), self)
 
 
 

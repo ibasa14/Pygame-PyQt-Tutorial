@@ -1,7 +1,8 @@
 <RCC>
   <qresource prefix="juegos">
     <file>fondo_retro.png</file>
-    <file>brick_breaker.png</file>
+    <file>pong.jpg</file>
+    <file>pong.png</file>
     <file>snake_game.jpg</file>
     <file>sudoku_png.png</file>
   </qresource>

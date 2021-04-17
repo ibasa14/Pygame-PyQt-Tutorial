@@ -67,7 +67,7 @@ class Panel():
                 pass            
     
 
-class BrickBreakerGame():
+class SelfPongGame():
     def __init__(self):
         self.game = pygame.init()
         self.display = pygame.display.set_mode((300, 300))
@@ -125,7 +125,7 @@ class BrickBreakerGame():
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        BrickBreakerGame()
+                        SelfPongGame()
 
 
 
@@ -141,8 +141,7 @@ class BrickBreakerGame():
                                                                 self.left_wall.width, self.left_wall.height])
         pygame.draw.rect(self.display, self.top_wall.color, [self.top_wall.x_position, self.top_wall.y_position ,\
                                                                 self.top_wall.width, self.top_wall.height])
-        #pygame.draw.rect(self.display, self.bottom_wall.color, [self.bottom_wall.x_position, self.bottom_wall.y_position - self.bottom_wall.height ,\
-        #                                                       self.bottom_wall.width, self.bottom_wall.height])                                                                  
+                                                            
     def draw_panel(self):
         pygame.draw.rect(self.display, self.panel.color, [self.panel.x_position, self.panel.y_position - self.panel.height,\
                                                           self.panel.width, self.panel.height])
@@ -250,13 +249,18 @@ class BrickBreakerGame():
                     
             keys=pygame.key.get_pressed()
 
-            if keys[pygame.K_RIGHT]:
-                self.panel.move('right', self.display.get_width(), self.right_wall.width)
-            if keys[pygame.K_LEFT]:
-                self.panel.move('left', self.display.get_width(), self.right_wall.width)                    
+            if keys[pygame.K_SPACE]:
+                pass
 
-            if self.ball.static == False:
-                self.ball.move(self.angle)
+            else:
+
+                if keys[pygame.K_RIGHT]:
+                    self.panel.move('right', self.display.get_width(), self.right_wall.width)
+                if keys[pygame.K_LEFT]:
+                    self.panel.move('left', self.display.get_width(), self.right_wall.width)                  
+
+                if self.ball.static == False:
+                    self.ball.move(self.angle)
 
             self.draw_panel()
             self.check_collide()
@@ -265,4 +269,4 @@ class BrickBreakerGame():
             self.clock.tick(120)
 
 if __name__ == '__main__':
-    brick_breaker_game = BrickBreakerGame()
+    self_pong_game = SelfPongGame()

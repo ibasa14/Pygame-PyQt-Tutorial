@@ -65,10 +65,7 @@ def auto_resolve(grid):
                         grid[y][x] = n
                         auto_resolve(grid)
                         grid[y][x] = 0
-                #print('justo antes del primer return')
                 return
-    print('justo antes del segundo return')
-    print(grid)
     return grid
     
 
@@ -120,7 +117,6 @@ class Sudoku():
     def checkCuadrant(self, cuadrant, row, column):
         aux_array=cuadrant.flatten()
         if np.sum(aux_array==self.array[row, column])>1:
-            #print('El numero {}, aparece: {} veces'.format(self.array[row,column],np.sum(aux_array==self.array[row, column])))
             return False
         return True
 
@@ -132,16 +128,6 @@ class Sudoku():
 
     def copy(self):
         return copy.copy(self)        
-
-    '''def isCorrect(self):
-        for r in range(0, 9):
-            for c in range(0,9):
-                if not self.checkRow(r,c) or not self.checkColumn(r,c):
-                    return False
-        for cuadrant in self.cuadrants.values():
-            if not self.checkCuadrant(cuadrant):
-                return False
-        return True'''
 
     def nextCell(self, x, y):
         if (x,y)==(8,8):
@@ -167,19 +153,13 @@ class Sudoku():
         imposible=False
         iteracion = 0
         while ((not tracking_dict[step]['sudoku'].checkRow(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])) or (not tracking_dict[step]['sudoku'].checkColumn(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])) or (not tracking_dict[step]['sudoku'].checkCuadrant(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]), tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])) or (tracking_dict[step]['sudoku'].array[tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]]==0) or (not tracking_dict[step]['sudoku'].checkCuadrantCompleted(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]))) or (not  tracking_dict[step]['sudoku'].checkRowCompleted(tracking_dict[step]['cell'][0])) or (not  tracking_dict[step]['sudoku'].checkColumnCompleted(tracking_dict[step]['cell'][1]) )):           
-            #print('empezamos de nuevo el bucle')
             print(f'iteracion: {iteracion}', end = '\r')
             iteracion +=1
             try:
                 num=random.choice(tracking_dict[step]['choices'])
                 tracking_dict[step]['choices'].remove(num)
                 tracking_dict[step]['sudoku'].array[tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]]=num
-                #print ('step: {},\nsudoku:\n{},\ncell: {}\nchoices: {}'.format(step, tracking_dict[step]['sudoku'].array, tracking_dict[step]['cell'], tracking_dict[step]['choices']))
-                #print('Check row: {}'.format(tracking_dict[step]['sudoku'].checkRow(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-                #print('Check column: {}'.format(tracking_dict[step]['sudoku'].checkColumn(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-                #print('Check cuadrant {}: {}'.format(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]),tracking_dict[step]['sudoku'].checkCuadrant(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]), tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-                #print('Set number: {}'.format(tracking_dict[step]['sudoku'].array[tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]]))
-                #print('\n')
+
                 if ((not tracking_dict[step]['sudoku'].checkRow(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])) or (not tracking_dict[step]['sudoku'].checkColumn(tracking_dict[step]['cell'][0], tracking_dict[step]['cell'][1])) or (not tracking_dict[step]['sudoku'].checkCuadrant(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]),tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])) ):
                     continue
                 step+=1
@@ -197,20 +177,14 @@ class Sudoku():
                 tracking_dict[step]['choices']=[1,2,3,4,5,6,7,8,9]
                 tracking_dict[step]['sudoku'].array[tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]]=0
                 step-=1
-                #print('restamos un step')
                 if tracking_dict[step]['cell']==(0,0):
-                    #print('no se puede resolver')
                     imposible=True
                     break
                 continue
         if imposible:
             return (np.zeros((9,9)))
         else:
-            #print('si alguna de las siguientes condiciones es False, entonces deberia haberse ejecutado el while')
-            #print('checkrow: {}'.format(tracking_dict[step]['sudoku'].checkRow(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-            #print('checkcol: {}'.format(tracking_dict[step]['sudoku'].checkColumn(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-            #print('checkcuadrant {}'.format(tracking_dict[step]['sudoku'].checkCuadrant(tracking_dict[step]['sudoku'].getCuadrant(tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]), tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1])))
-            #print('is cero: {}'.format(tracking_dict[step]['sudoku'].array[tracking_dict[step]['cell'][0],tracking_dict[step]['cell'][1]]==0))
+
             print('The solution to this sudoku problem is: \n')
             print(tracking_dict[step]['sudoku'].array)
             return (tracking_dict[step]['sudoku'].array)

@@ -150,7 +150,7 @@ class SudokuGame(QMainWindow):
 
 	def get_values(self):
 		grid_auxiliar = np.zeros((9,9))
-		for key, values in self.diccionario_celdas.items():
+		for key, _ in self.diccionario_celdas.items():
 			row = int(key[-2])
 			col = int(key[-1])
 			grid_auxiliar[row][col] = self.diccionario_celdas[key].value()

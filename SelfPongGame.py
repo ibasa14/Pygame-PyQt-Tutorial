@@ -71,6 +71,7 @@ class SelfPongGame():
     def __init__(self):
         self.game = pygame.init()
         self.display = pygame.display.set_mode((300, 300))
+        self.name = pygame.display.set_caption("Basa's Self Pong")
         self.panel = Panel(initial_x = int(self.display.get_width()/2), initial_y = self.display.get_height())
         self.playing = True
         self.game_over = False
@@ -173,7 +174,7 @@ class SelfPongGame():
                     self.angle =  180 - self.angle
                 self.collide_counter = 15
                 self.normalize_angle()
-                print(f"El angulo nuevo es angle: {self.angle}")
+                #print(f"El angulo nuevo es angle: {self.angle}")
                 return
 
             #pared de arriba
@@ -184,7 +185,7 @@ class SelfPongGame():
                     self.angle = self.angle + 270
                 self.collide_counter = 15
                 self.normalize_angle()
-                print(f"El angulo nuevo es angle: {self.angle}")
+                #print(f"El angulo nuevo es angle: {self.angle}")
                 return
 
             #pared izquierda
@@ -195,7 +196,7 @@ class SelfPongGame():
                     self.angle = 360 - self.angle + 180
                 self.collide_counter = 15
                 self.normalize_angle()
-                print(f"El angulo nuevo es angle: {self.angle}")
+                #print(f"El angulo nuevo es angle: {self.angle}")
                 return
 
             if self.ball.y_position >= self.display.get_height() - self.panel.height and \
@@ -218,7 +219,7 @@ class SelfPongGame():
                     self.angle = np.random.randint(30, 50)   
                                                              
                 self.collide_counter = 3
-                print(f"El angulo nuevo es angle: {self.angle}")
+                #print(f"El angulo nuevo es angle: {self.angle}")
                 return
 
             if self.ball.y_position >= self.display.get_height():

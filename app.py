@@ -52,7 +52,7 @@ class Intro(QWidget):
 class SeleccionJuego(QWidget):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego_v2.ui'), self)
+		uic.loadUi(os.path.join(UI_PATH, 'seleccion_juego.ui'), self)
 
 
 

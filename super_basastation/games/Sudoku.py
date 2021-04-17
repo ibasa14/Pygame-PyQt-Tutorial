@@ -7,8 +7,7 @@ import copy
 import tqdm
 import joblib
 
-SUDOKU_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sudokusdb', 'problemas')
-SOLUTION_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sudokusdb', 'soluciones')
+
 
 
 def select_sudoku():
@@ -17,7 +16,7 @@ def select_sudoku():
     de manera aleatoria
     @return: nombre de archivo de sudoku
     '''
-    choices = os.listdir(SUDOKU_FOLDER)
+    choices = os.listdir(os.environ.get('SUDOKU_FOLDER'))
     choice = np.random.choice(choices)
 
     return choice
@@ -29,8 +28,8 @@ def load_sudoku(filename):
     @return: tuple (numpy array sudoku problema, numpy array sudoku solucion)
     '''
     numero_sudoku = os.path.splitext(filename)[0].split('_')[1]
-    problema = joblib.load(os.path.join(SUDOKU_FOLDER, filename))
-    solucion = joblib.load(os.path.join(SOLUTION_FOLDER, f'solucion_{numero_sudoku}.pkl'))
+    problema = joblib.load(os.path.join(os.environ.get('SUDOKU_FOLDER'), filename))
+    solucion = joblib.load(os.path.join(os.environ.get('SOLUTION_FOLDER'), f'solucion_{numero_sudoku}.pkl'))
     return (problema, solucion)
     
 def possible(y,x,n, grid):

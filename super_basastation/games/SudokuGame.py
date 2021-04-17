@@ -1,17 +1,15 @@
 from PyQt5.QtWidgets import  QMainWindow, QDialog
 from PyQt5 import uic, QtTest
 import os
-from Sudoku import load_sudoku, select_sudoku, possible, auto_resolve
+from super_basastation.games.Sudoku import load_sudoku, select_sudoku, possible, auto_resolve
 import numpy as np
 import time
-
-UI_PATH = os.path.join(os.getcwd(), 'ui')
 
 
 class SudokuGame(QMainWindow):
 	def __init__(self, parent=None):
 		super(SudokuGame, self).__init__(parent)
-		uic.loadUi(os.path.join(UI_PATH, 'sudoku.ui'), self)
+		uic.loadUi(os.path.join(os.environ.get('UI_PATH'), 'sudoku.ui'), self)
 
 		self.diccionario_celdas = {
 			'cell00': self.cell00,
@@ -833,6 +831,6 @@ class CustomDialog(QDialog):
 
 	def __init__(self, *args, **kwargs):
 		super(CustomDialog, self).__init__(*args, **kwargs)
-		uic.loadUi(os.path.join(UI_PATH, 'dialog_success.ui'), self)
+		uic.loadUi(os.path.join(os.environ.get('UI_PATH'), 'dialog_success.ui'), self)
 
 		self.pushButton.clicked.connect(self.accept)

@@ -105,6 +105,7 @@ class SelfPongGame():
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    #os.environ['PONG_ON'] = 'False'
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -123,6 +124,7 @@ class SelfPongGame():
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    #os.environ['PONG_ON'] = 'False'
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -246,6 +248,7 @@ class SelfPongGame():
                 self.game_over_message()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    #os.environ['PONG_ON'] = 'False'
                     quit()
                     
             keys=pygame.key.get_pressed()
@@ -269,5 +272,7 @@ class SelfPongGame():
             pygame.display.update()
             self.clock.tick(120)
 
+
 if __name__ == '__main__':
-    self_pong_game = SelfPongGame()
+    #os.environ['PONG_ON'] = 'True'
+    snake_game = SelfPongGame()

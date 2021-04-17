@@ -2,10 +2,23 @@ from PyQt5.QtWidgets import  QApplication, QWidget, QMainWindow, QStackedWidget
 from PyQt5 import uic
 import sys
 import os
-import resources
-from SudokuGame import SudokuGame
+from super_basastation.games import resources
+from super_basastation.games.SudokuGame import SudokuGame
+#from threading import Thread
 
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 UI_PATH = os.path.join(os.getcwd(), 'ui')
+SUDOKU_FOLDER = os.path.join(os.getcwd(), 'games','sudokusdb', 'problemas')
+SOLUTION_FOLDER = os.path.join(os.getcwd(), 'games', 'sudokusdb', 'soluciones')
+
+os.environ['UI_PATH'] = UI_PATH
+os.environ['SUDOKU_FOLDER'] = SUDOKU_FOLDER
+os.environ['SOLUTION_FOLDER'] = SOLUTION_FOLDER
+os.environ['SNAKE_ON'] = 'False'
+os.environ['PONG_ON'] = 'False'
+
+
 
 class MainWindow(QMainWindow):
 	def __init__(self, parent=None):
@@ -39,10 +52,10 @@ class MainWindow(QMainWindow):
 		self.sudoku_game.show()
 
 	def open_snake(self, event):
-		os.system('python SnakeGame.py')
+		os.system('python games/SnakeGame.py')
 
 	def open_pong(self, event):
-		os.system('python SelfPongGame.py')
+		os.system('python games/SelfPongGame.py')
 
 class Intro(QWidget):
 	def __init__(self, *args, **kwargs):
@@ -56,7 +69,8 @@ class SeleccionJuego(QWidget):
 
 
 
-if __name__ == '__main__':
+
+def run():
 	app = QApplication(sys.argv)
 	window = MainWindow()
 	window.show()

@@ -96,6 +96,7 @@ class SnakeGame():
 					if event.key == pygame.K_SPACE:
 						SnakeGame()
 				if event.type == pygame.QUIT:
+					#os.environ['SNAKE_ON'] = 'False'
 					quit()		
 
 	def snake_desc(self):
@@ -120,6 +121,7 @@ class SnakeGame():
 			self.display.fill(self.color)
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
+					#os.environ['SNAKE_ON'] = 'False'
 					quit()
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_RIGHT and self.snake.x_distance != - self.snake.speed:
@@ -174,4 +176,5 @@ class SnakeGame():
 
 
 if __name__ == '__main__':
+	#os.environ['SNAKE_ON'] = 'True'
 	snake_game = SnakeGame()

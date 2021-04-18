@@ -14,8 +14,8 @@ pip install -r requirements.txt
 
 # Uso
 
-Correr el fichero app.py
+Correr el modulo
 
 ```
-python app.py
+python -m super_basastation
 ```
